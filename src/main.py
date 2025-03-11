@@ -1,7 +1,4 @@
-from models import *
 import json
-import sqlalchemy
-from sqlalchemy.orm import sessionmaker
 from models.book import Book
 from models.publisher import Publisher
 from models.sale import Sale
@@ -29,21 +26,22 @@ def import_test_data():
     session.commit()
     session.close()
 
+
 def get_data(a):
     session = get_session()
-    q = session.query(Book.title, Shop.name, Sale.price, Sale.date_sale).select_from(Publisher).join(Book).join(Stock).join(Shop).join(Sale)
+    q = session.query(Book.title, Shop.name, Sale.price, Sale.date_sale).select_from(Publisher).join(Book).join(
+        Stock).join(Shop).join(Sale)
     if a.isdigit():
         x = q.filter(Publisher.id == a).all()
     else:
         x = q.filter(Publisher.name == a).all()
 
-    for  book_title,shop_name,sale_price,sale_date_sale in x:
+    for book_title, shop_name, sale_price, sale_date_sale in x:
         print(f"{book_title:<20}|{shop_name:<10}|{sale_price:<5}|{sale_date_sale}")
     session.close()
 
 
-
 if __name__ == "__main__":
     import_test_data()
-    get_data(a = input("Введите имя или ID: "))
+    get_data(a=input("Введите имя или ID: "))
     clear_db()

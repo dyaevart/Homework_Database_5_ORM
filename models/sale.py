@@ -2,6 +2,7 @@ import sqlalchemy as sq
 from src.base import Base
 from sqlalchemy.orm import relationship
 
+
 class Sale(Base):
     __tablename__ = "sale"
 

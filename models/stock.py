@@ -13,4 +13,3 @@ class Stock(Base):
 
     book = relationship("Book", backref="book")
     shop = relationship("Shop", backref="shop")
-
