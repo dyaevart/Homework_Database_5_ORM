@@ -1,10 +1,9 @@
 import sqlalchemy as sq
-from global_vars import GlobalVars
-from src.method_sale import Sale
+from src.base import Base
 from sqlalchemy.orm import relationship
 
 
-class Stock(GlobalVars.Base):
+class Stock(Base):
     __tablename__ = "stock"
 
     id = sq.Column(sq.Integer, primary_key=True)
@@ -12,5 +11,6 @@ class Stock(GlobalVars.Base):
     id_shop = sq.Column(sq.Integer, sq.ForeignKey("shop.id"), nullable=False)
     count = sq.Column(sq.Integer)
 
-    sale = relationship(Sale, backref="sale")
+    book = relationship("Book", backref="book")
+    shop = relationship("Shop", backref="shop")
 

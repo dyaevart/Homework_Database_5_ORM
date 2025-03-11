@@ -1,21 +1,42 @@
+from models import *
+import json
 import sqlalchemy
-import sqlalchemy as sq
-from sqlalchemy.orm import declarative_base, relationship, sessionmaker
-from global_vars import GlobalVars
-from model_publisher import Publisher
-from database_methods import DatabaseMethods
+from sqlalchemy.orm import sessionmaker
+from models.book import Book
+from models.publisher import Publisher
+from models.sale import Sale
+from models.shop import Shop
+from models.stock import Stock
+from src.base import session_factory
 
 
-f = DatabaseMethods()
-session = f.get_db_session(GlobalVars.engine)
-f.create_tables(GlobalVars.engine)
+def create_publisher():
+    session = session_factory()
+    p = Publisher(name="Eksmoo")
+    b = Book(title="Misery", publisher=p)
+    session.add(p)
+    session.add(b)
+    session.commit()
+    session.close()
 
-p = Publisher(name="Eksmo")
-print(p.id)
+def import_test_data():
+    session = session_factory()
 
-session.add(p)
-print(p.id)
+    with open('../fixtures/tests_data.json', 'r') as fd:
+        data = json.load(fd)
+
+    for record in data:
+        model = {
+            'publisher': Publisher,
+            'shop': Shop,
+            'book': Book,
+            'stock': Stock,
+            'sale': Sale,
+        }[record.get('model')]
+        session.add(model(id=record.get('pk'), **record.get('fields')))
+    session.commit()
 
 
-session.commit()
-print(p.id)
+if __name__ == "__main__":
+    # create_publisher()
+    import_test_data()
