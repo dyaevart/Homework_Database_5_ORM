@@ -44,7 +44,6 @@ def get_data(a):
 
 
 if __name__ == "__main__":
-    # create_publisher()
     import_test_data()
     get_data(a = input("Введите имя или ID: "))
     clear_db()
