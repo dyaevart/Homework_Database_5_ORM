@@ -1,13 +1,20 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from vars import Vars
 
-engine = create_engine('postgresql://postgres:123gh45@localhost:5432/some_db')
+Vars.initialize()
+s = Vars.DB_TYPE + "://" + Vars.USER + ":" + Vars.PASS + "@" + Vars.HOST + ":" + Vars.PORT + "/" + Vars.DB_NAME
+engine = create_engine(s)
 Session = sessionmaker(bind=engine)
 
 Base = declarative_base()
 
 
-def session_factory():
+def get_session():
     Base.metadata.create_all(engine)
     return Session()
+
+def clear_db():
+    Base.metadata.drop_all(engine)
+
